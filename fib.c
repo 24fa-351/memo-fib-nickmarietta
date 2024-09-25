@@ -1,4 +1,6 @@
+
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 // changes for memoization!
@@ -6,8 +8,8 @@
    - needed for both iterative and recursive
    - duplicate the memoization code for both i and r
    - rename underlying fib() routines to fib_i_core for example
-
 */
+
 
 unsigned long long int fib_i_core(unsigned long long int n) {
    if (n == 1) {
@@ -20,7 +22,6 @@ unsigned long long int fib_i_core(unsigned long long int n) {
    unsigned long long int firstPrevious = 0;
    unsigned long long int secondPrevious = 1;
    unsigned long long int fibonacciSum = 1;
-
    for (unsigned long long int i = 3; i <= n; i++) {
       fibonacciSum = firstPrevious + secondPrevious;
       firstPrevious = secondPrevious;
@@ -28,6 +29,7 @@ unsigned long long int fib_i_core(unsigned long long int n) {
    }
    return fibonacciSum;
 }
+
 
 unsigned long long int fib_r_core(unsigned long long int n) {
    if (n <= 1) {
@@ -37,31 +39,31 @@ unsigned long long int fib_r_core(unsigned long long int n) {
    }
    return fib_r_core(n - 1) + fib_r_core(n - 2);
 }
+unsigned long long int iter_memocache[1000] = {0};
 
 unsigned long long int fib_i_memo(int nFind) {
-   // need to put a size
-   unsigned long long int memocache[1000] = {0};
-   if (memocache[nFind] == 0) {
-      memocache[nFind] = fib_i_core(nFind);
+   if (iter_memocache[nFind] != 0) {
+      return iter_memocache[nFind];
    }
-   return memocache[nFind];   
+   iter_memocache[nFind] = fib_i_core(nFind);
+   return iter_memocache[nFind];
 }
+
+unsigned long long int recur_memocache[1000] = {0};
 
 unsigned long long int fib_r_memo(int nFind) {
-   unsigned long long int memocache[1000] = {0};
-   if (memocache[nFind] == 0) {
-      memocache[nFind] = fib_r_core(nFind);
+   if (recur_memocache[nFind] != 0) {
+      return recur_memocache[nFind];
    }
-   return memocache[nFind];
+   recur_memocache[nFind] = fib_r_core(nFind);
+   return recur_memocache[nFind];
 }
-
 
 
 int main(int argc, char *argv[]) {
    int firstFibNumber;
    firstFibNumber = atoi(argv[1]);
    char method = argv[2][0];
-
       
    if (method == 'i') {
       // here do the iterative method
