@@ -29,7 +29,6 @@ unsigned long long int fib_i_wrapper(unsigned long long int n) {
 
 static unsigned long long int memocache[1000] = {0};
 
-
 unsigned long long int fib_r_wrapper(unsigned long long int n) {
    if (n <= 1) {
       return 0;
@@ -43,7 +42,7 @@ unsigned long long int fib_i_core(unsigned long long nFind) {
    if (memocache[nFind] != 0) {
       return memocache[nFind];
    }
-   memocache[nFind] = fib_i_core(nFind);
+   memocache[nFind] = fib_i_wrapper(nFind);
    return memocache[nFind];
 }
 
@@ -63,11 +62,11 @@ int main(int argc, char *argv[]) {
       
    if (method == 'i') {
       // here do the iterative method
-      printf("%lld\n", (fib_i_memo(firstFibNumber)));
+      printf("%lld\n", (fib_i_core(firstFibNumber)));
    } else {
       // here do the recursive method
       //printf("This is the Recursive method up to: %d\n", fibonacciNum);
-      printf("%lld\n", (fib_r_memo(firstFibNumber)));
+      printf("%lld\n", (fib_r_core(firstFibNumber)));
    }
    return 0;
 }
